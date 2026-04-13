@@ -95,6 +95,14 @@
       h1 { font-size: 1.05rem; }
       .sub { font-size: 0.78rem; }
 
+      /* slim down flights table */
+      #flightsTable { min-width: unset; }
+      #flightsTable th:nth-child(1),
+      #flightsTable td:nth-child(1) { display: none; } /* # */
+      #flightsTable th:nth-child(3),
+      #flightsTable td:nth-child(3) { display: none; } /* חזרה */
+      #flightsTable .t { display: none; }              /* flight times */
+
       /* hide desktop vote table, show cards instead */
       .vote-table-wrap { display: none; }
 
