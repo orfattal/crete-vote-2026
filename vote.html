@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>הצבעה — טיסה לכרתים 2026</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6f9; display: flex; justify-content: center; padding: 32px 16px; direction: rtl; }
+    .wrap { width: 100%; max-width: 1000px; }
+    h1 { font-size: 1.2rem; color: #003f88; margin-bottom: 4px; font-weight: 700; }
+    h2 { font-size: 1rem; color: #003f88; margin: 28px 0 10px; font-weight: 700; }
+    .sub { font-size: 0.82rem; color: #667; margin-bottom: 20px; }
+    .section-intro { font-size: 0.84rem; color: #445; margin-bottom: 12px; line-height: 1.6; }
+
+    /* ── SHARED TABLE STYLES ── */
+    .table-wrap { overflow-x: auto; margin-bottom: 8px; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.09); }
+    thead tr { background: #003f88; color: #fff; }
+    th { padding: 10px 10px; font-size: 0.77rem; font-weight: 600; text-align: right; white-space: nowrap; }
+    td { padding: 9px 10px; font-size: 0.84rem; border-bottom: 1px solid #edf0f4; text-align: right; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+
+    /* ── FLIGHTS TABLE ── */
+    #flightsTable { min-width: 600px; }
+    #flightsTable td { white-space: nowrap; }
+    #flightsTable td.hol-col { white-space: normal; }
+    .t { font-size: 0.75rem; color: #778; direction: ltr; display: inline-block; }
+    tr.out { background: #fdf0f0; }
+    tr.out td { color: #bbb; }
+    tr.hol { background: #fffbe6; }
+    tr.sep td { background: #e8edf3; font-size: 0.73rem; font-weight: 700; color: #556; letter-spacing: .4px; padding: 5px 14px; }
+    .price { font-weight: 700; direction: ltr; }
+    .price.green { color: #27ae60; }
+    .price.amber { color: #d07000; }
+    .price.grey  { color: #bbb; }
+    .price-ils { font-size: 0.72rem; color: #999; direction: ltr; display: block; }
+    s { color: #ccc; }
+    .eve { font-size: 0.78rem; color: #003f88; font-weight: 600; display: block; margin-top: 4px; }
+    .note { font-size: 0.7rem; color: #888; font-style: italic; }
+    .tag { display: inline-block; border-radius: 8px; padding: 2px 7px; font-size: 0.72rem; font-weight: 600; }
+    .tag.red  { background: #fdd; color: #900; }
+    .tag.gold { background: #ffd966; color: #7a5000; }
+    .tag.ok   { background: #dfd; color: #1a6b1a; }
+    .tag.grey { background: #eee; color: #888; }
+
+    /* ── VOTE TABLE ── */
+    #voteTable { min-width: 520px; }
+    #voteTable td { white-space: nowrap; }
+    .legend { display: flex; gap: 18px; margin-bottom: 14px; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: #445; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .dot.great { background: #27ae60; }
+    .dot.ok    { background: #f0a500; }
+    .dot.no    { background: #e74c3c; }
+
+    th.name-col { text-align: right; padding-right: 14px; min-width: 70px; }
+    .date-head .range  { font-weight: 700; display: block; font-size: 0.82rem; }
+    .date-head .dprice { color: #ffd966; font-size: 0.7rem; }
+    .date-head .dprice-ils { color: #b8d8ff; font-size: 0.65rem; }
+    .date-head .dnote  { color: #aac8ff; font-size: 0.66rem; }
+
+    tr.vote-row td { padding: 8px 8px; }
+    tr.vote-row:nth-child(even) { background: #f9fbfd; }
+    tr.vote-row:hover { background: #f2f7ff; }
+    td.name { text-align: right; padding-right: 14px; font-weight: 700; font-size: 0.9rem; color: #1a2a3a; }
+
+    .opts { display: flex; gap: 3px; justify-content: center; }
+    .opt-btn { border: 1.5px solid #ddd; background: #fff; border-radius: 7px; padding: 4px 8px; font-size: 0.69rem; cursor: pointer; color: #999; transition: all .12s; font-family: inherit; white-space: nowrap; }
+    .opt-btn:hover { border-color: #aaa; color: #555; }
+    .opt-btn.active-great { background: #e6f9ee; border-color: #27ae60; color: #1a7a40; font-weight: 700; }
+    .opt-btn.active-ok    { background: #fff8e1; border-color: #f0a500; color: #9a6700; font-weight: 700; }
+    .opt-btn.active-no    { background: #fdecea; border-color: #e74c3c; color: #c0392b; font-weight: 700; }
+
+    tr.divider td { background: #e8edf3; padding: 4px 14px; font-size: 0.7rem; font-weight: 700; color: #556; text-transform: uppercase; letter-spacing: .4px; }
+
+    tr.sum-row td { padding: 6px 8px; border-bottom: 1px solid #edf0f4; background: #fafcff; }
+    td.sum-label { text-align: right; padding-right: 14px; font-size: 0.78rem; color: #556; }
+    .sum-label-inner { display: flex; align-items: center; gap: 6px; }
+    .mini-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .sum-cell-inner { display: flex; align-items: center; justify-content: center; gap: 5px; }
+    .sum-bar-wrap { width: 50px; background: #e9ecf0; border-radius: 4px; height: 8px; }
+    .sum-bar { height: 8px; border-radius: 4px; transition: width .3s; }
+    .sum-bar.great { background: #27ae60; }
+    .sum-bar.ok    { background: #f0a500; }
+    .sum-bar.no    { background: #e74c3c; }
+    .sum-num { font-size: 0.78rem; font-weight: 700; color: #334; min-width: 14px; }
+
+    tr.winner-row td { padding: 10px 10px; background: #f0fff4; text-align: center; font-size: 0.82rem; font-weight: 600; color: #1a6b1a; }
+    tr.winner-row td.name { text-align: right; color: #1a6b1a; }
+    .winner-cell { font-size: 1.05rem; }
+    .winner-cell.best    { color: #27ae60; }
+    .winner-cell.blocked { color: #e74c3c; font-size: 0.8rem; }
+    .winner-cell.neutral { color: #ccc; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>✈ בלובירד אירווייז &nbsp;·&nbsp; TLV → CHQ &nbsp;·&nbsp; ספטמבר–אוקטובר 2026</h1>
+  <div class="sub">יציאה בימי חמישי 08:15 TLV → 10:10 CHQ &nbsp;·&nbsp; חזרה בימי ראשון 11:10 CHQ → 12:55 TLV &nbsp;·&nbsp; BZ 764 / BZ 763 &nbsp;·&nbsp; מחירים הלוך-חזור לנוסע · שקלים לפי שע׳ 3.57 ₪/€</div>
+
+  <!-- ══════════════════════════════════════
+       TABLE 1 — FLIGHT OPTIONS & DETAILS
+       ══════════════════════════════════════ -->
+  <p class="section-intro">להלן כל הסופשבועות שבהם בלובירד מפעילה את הקו TLV↔CHQ בספטמבר–אוקטובר 2026 — כולל מחיר, חג ומה שקורה בערב החג. שניים מהם פסולים מראש (ראש השנה והווילה תפוסה), השאר פתוחים להצבעה.</p>
+  <div class="table-wrap">
+  <table id="flightsTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>יציאה (חמישי)</th>
+        <th>חזרה (ראשון)</th>
+        <th style="text-align:left;">מחיר הלוך-חזור</th>
+        <th>הערות</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr class="sep"><td colspan="5">ספטמבר 2026</td></tr>
+
+      <tr class="out">
+        <td>1</td>
+        <td><s>חמישי, 3 ספט׳</s> <span class="t">08:15→10:10</span></td>
+        <td><s>ראשון, 6 ספט׳</s> <span class="t">11:10→12:55</span></td>
+        <td class="price grey"><s>€239</s> <span class="price-ils"><s>₪853</s></span></td>
+        <td class="hol-col"><span class="tag grey">🏠 הווילה תפוסה</span></td>
+      </tr>
+
+      <tr class="out">
+        <td>2</td>
+        <td><s>חמישי, 10 ספט׳</s> <span class="t">08:15→10:10</span></td>
+        <td><s>ראשון, 13 ספט׳</s> <span class="t">11:10→12:55</span></td>
+        <td class="price grey"><s>€427</s> <span class="price-ils"><s>₪1,524</s></span></td>
+        <td class="hol-col">
+          <span class="tag red">🍎 ראש השנה ✗</span>
+          <span class="eve">ערב ראש השנה ביום שישי, 11 ספט׳, בשעה 18:30</span>
+        </td>
+      </tr>
+
+      <tr>
+        <td>3</td>
+        <td>חמישי, 17 ספט׳ <span class="t">08:15→10:10</span></td>
+        <td>ראשון, 20 ספט׳ <span class="t">11:10→12:55</span></td>
+        <td class="price green">€257 <span class="price-ils">₪917</span></td>
+        <td class="hol-col">
+          <span class="tag ok">🕍 יום כיפור ✓</span>
+          <span class="eve">ערב יום כיפור ביום ראשון, 20 ספט׳, בשעה 18:30 <span class="note">(נוחתים 12:55 — בסדר)</span></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td>4</td>
+        <td>חמישי, 24 ספט׳ <span class="t">08:15→10:10</span></td>
+        <td>ראשון, 27 ספט׳ <span class="t">11:10→12:55</span></td>
+        <td class="price amber">€359 <span class="price-ils">₪1,282</span></td>
+        <td class="hol-col">
+          <span class="tag ok">🌿 סוכות</span>
+          <span class="eve">ערב סוכות ביום שישי, 25 ספט׳, בשעה 18:30</span>
+        </td>
+      </tr>
+
+      <tr class="sep"><td colspan="5">אוקטובר 2026</td></tr>
+
+      <tr>
+        <td>5</td>
+        <td>חמישי, 1 אוק׳ <span class="t">08:15→10:10</span></td>
+        <td>ראשון, 4 אוק׳ <span class="t">11:10→12:55</span></td>
+        <td class="price green">€375 <span class="price-ils">₪1,339</span></td>
+        <td class="hol-col">
+          <span class="tag ok">🎉 שמחת תורה ✓</span>
+          <span class="eve">ערב שמחת תורה ביום שישי, 2 אוק׳, בשעה 18:30</span>
+        </td>
+      </tr>
+
+      <tr class="out">
+        <td>6</td>
+        <td><s>חמישי, 8 אוק׳ – 29 אוק׳</s></td>
+        <td><s>ראשון, 11 אוק׳ – 1 נוב׳</s></td>
+        <td class="price grey">—</td>
+        <td class="hol-col"><span class="tag grey">🏁 אין טיסות — העונה מסתיימת אחרי 4 אוק׳</span></td>
+      </tr>
+
+    </tbody>
+  </table>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       TABLE 2 — VOTING
+       ══════════════════════════════════════ -->
+  <h2>הצבעה — מתי מתאים לכן?</h2>
+  <p class="section-intro">שלוש האפשרויות הריאליות שנותרו אחרי הסינון — הצביעו לכל תאריך מה מתאים לכן. כולן רואות את ההצבעות בזמן אמת.</p>
+
+  <div class="legend">
+    <div class="legend-item"><div class="dot great"></div> מתאים מעולה</div>
+    <div class="legend-item"><div class="dot ok"></div> אפשרי, לא מועדף</div>
+    <div class="legend-item"><div class="dot no"></div> לא מתאים בכלל</div>
+  </div>
+
+  <div class="table-wrap">
+  <table id="voteTable">
+    <thead>
+      <tr>
+        <th class="name-col">שם</th>
+        <th><div class="date-head"><span class="range">17–20 ספט׳</span><span class="dprice">€257 · ₪917</span><span class="dnote">ערב יוה״כ</span></div></th>
+        <th><div class="date-head"><span class="range">24–27 ספט׳</span><span class="dprice">€359 · ₪1,282</span><span class="dnote">סוכות</span></div></th>
+        <th><div class="date-head"><span class="range">1–4 אוק׳</span><span class="dprice">€375 · ₪1,339</span><span class="dnote">שמח״ת</span></div></th>
+      </tr>
+    </thead>
+    <tbody id="voteBody"></tbody>
+  </table>
+  </div>
+
+</div>
+
+<script>
+  const girls = ['טלי', 'רותם', 'אירה', 'יאנה'];
+  const dates = [
+    { id: 'd2', label: '17–20 ספט׳' },
+    { id: 'd3', label: '24–27 ספט׳' },
+    { id: 'd4', label: '1–4 אוק׳' },
+  ];
+  const OPTS = [
+    { val: 'great', label: '✓ מעולה' },
+    { val: 'ok',    label: '~ אפשרי' },
+    { val: 'no',    label: '✗ לא מתאים' },
+  ];
+
+  const saved = JSON.parse(localStorage.getItem('creteVote5') || '{}');
+  const body  = document.getElementById('voteBody');
+
+  // ── VOTE ROWS ──
+  girls.forEach(girl => {
+    const tr = document.createElement('tr');
+    tr.className = 'vote-row';
+    let html = `<td class="name">${girl}</td>`;
+    dates.forEach(d => {
+      const key = `${girl}__${d.id}`;
+      const cur = saved[key] || null;
+      const btns = OPTS.map(o => {
+        const active = cur === o.val ? `active-${o.val}` : '';
+        return `<button class="opt-btn ${active}" data-girl="${girl}" data-date="${d.id}" data-val="${o.val}" onclick="choose(this)">${o.label}</button>`;
+      }).join('');
+      html += `<td><div class="opts">${btns}</div></td>`;
+    });
+    tr.innerHTML = html;
+    body.appendChild(tr);
+  });
+
+  // ── DIVIDER ──
+  const divTr = document.createElement('tr');
+  divTr.className = 'divider';
+  divTr.innerHTML = `<td colspan="4">סיכום</td>`;
+  body.appendChild(divTr);
+
+  // ── SUMMARY ROWS ──
+  OPTS.forEach(o => {
+    const tr = document.createElement('tr');
+    tr.className = 'sum-row';
+    let html = `<td class="sum-label"><div class="sum-label-inner"><div class="mini-dot ${o.val}"></div>${o.label}</div></td>`;
+    dates.forEach(d => {
+      html += `<td><div class="sum-cell-inner">
+        <div class="sum-bar-wrap"><div class="sum-bar ${o.val}" id="sb-${o.val}-${d.id}" style="width:0%"></div></div>
+        <span class="sum-num" id="sn-${o.val}-${d.id}">0</span>
+      </div></td>`;
+    });
+    tr.innerHTML = html;
+    body.appendChild(tr);
+  });
+
+  // ── WINNER ROW ──
+  const winTr = document.createElement('tr');
+  winTr.className = 'winner-row';
+  winTr.id = 'winRow';
+  winTr.style.display = 'none';
+  let winHtml = `<td class="name">👑 מסקנה</td>`;
+  dates.forEach(d => { winHtml += `<td id="win-${d.id}"></td>`; });
+  winTr.innerHTML = winHtml;
+  body.appendChild(winTr);
+
+  // ── CHOOSE (click active button again to unmark) ──
+  function choose(btn) {
+    const { girl, date, val } = btn.dataset;
+    const key = `${girl}__${date}`;
+    const wasActive = btn.classList.contains(`active-${val}`);
+
+    btn.closest('.opts').querySelectorAll('.opt-btn').forEach(b =>
+      b.classList.remove('active-great', 'active-ok', 'active-no'));
+
+    if (wasActive) {
+      delete saved[key];
+    } else {
+      btn.classList.add(`active-${val}`);
+      saved[key] = val;
+    }
+
+    localStorage.setItem('creteVote5', JSON.stringify(saved));
+    update();
+  }
+
+  // ── UPDATE ──
+  function update() {
+    let bestScore = -1;
+    const scores = {};
+
+    dates.forEach(d => {
+      let great = 0, ok = 0, no = 0;
+      girls.forEach(g => {
+        const v = saved[`${g}__${d.id}`];
+        if (v === 'great') great++;
+        else if (v === 'ok') ok++;
+        else if (v === 'no') no++;
+      });
+      const n = girls.length;
+      document.getElementById(`sb-great-${d.id}`).style.width = Math.round(great / n * 100) + '%';
+      document.getElementById(`sb-ok-${d.id}`).style.width    = Math.round(ok    / n * 100) + '%';
+      document.getElementById(`sb-no-${d.id}`).style.width    = Math.round(no    / n * 100) + '%';
+      document.getElementById(`sn-great-${d.id}`).textContent = great;
+      document.getElementById(`sn-ok-${d.id}`).textContent    = ok;
+      document.getElementById(`sn-no-${d.id}`).textContent    = no;
+
+      const score = no > 0 ? -1 : great * 2 + ok;
+      scores[d.id] = { score, great, ok, no };
+      if (score > bestScore) bestScore = score;
+    });
+
+    const anyVote = dates.some(d => girls.some(g => saved[`${g}__${d.id}`]));
+    const winRow  = document.getElementById('winRow');
+
+    if (anyVote && bestScore >= 0) {
+      winRow.style.display = '';
+      dates.forEach(d => {
+        const cell = document.getElementById(`win-${d.id}`);
+        const { score, no } = scores[d.id];
+        if (no > 0) {
+          cell.innerHTML = `<span class="winner-cell blocked">✗ חסום</span>`;
+        } else if (score === bestScore) {
+          cell.innerHTML = `<span class="winner-cell best">★ הכי מתאים</span>`;
+        } else {
+          cell.innerHTML = `<span class="winner-cell neutral">—</span>`;
+        }
+      });
+    } else if (anyVote) {
+      winRow.style.display = '';
+      dates.forEach(d => {
+        document.getElementById(`win-${d.id}`).innerHTML = `<span class="winner-cell blocked">✗ חסום</span>`;
+      });
+    } else {
+      winRow.style.display = 'none';
+    }
+  }
+
+  update();
+</script>
+</body>
+</html>
