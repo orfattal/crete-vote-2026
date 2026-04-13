@@ -6,15 +6,15 @@
   <title>הצבעה — טיסה לכרתים 2026</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6f9; display: flex; justify-content: center; padding: 32px 16px; direction: rtl; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6f9; display: flex; justify-content: center; padding: 24px 14px; direction: rtl; }
     .wrap { width: 100%; max-width: 1000px; }
-    h1 { font-size: 1.2rem; color: #003f88; margin-bottom: 4px; font-weight: 700; }
+    h1 { font-size: 1.2rem; color: #003f88; margin-bottom: 4px; font-weight: 700; line-height: 1.4; }
     h2 { font-size: 1rem; color: #003f88; margin: 28px 0 10px; font-weight: 700; }
-    .sub { font-size: 0.82rem; color: #667; margin-bottom: 20px; }
+    .sub { font-size: 0.82rem; color: #667; margin-bottom: 20px; line-height: 1.5; }
     .section-intro { font-size: 0.84rem; color: #445; margin-bottom: 12px; line-height: 1.6; }
 
     /* ── SHARED TABLE STYLES ── */
-    .table-wrap { overflow-x: auto; margin-bottom: 8px; }
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 8px; }
     table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.09); }
     thead tr { background: #003f88; color: #fff; }
     th { padding: 10px 10px; font-size: 0.77rem; font-weight: 600; text-align: right; white-space: nowrap; }
@@ -22,13 +22,12 @@
     tr:last-child td { border-bottom: none; }
 
     /* ── FLIGHTS TABLE ── */
-    #flightsTable { min-width: 600px; }
+    #flightsTable { min-width: 560px; }
     #flightsTable td { white-space: nowrap; }
     #flightsTable td.hol-col { white-space: normal; }
     .t { font-size: 0.75rem; color: #778; direction: ltr; display: inline-block; }
     tr.out { background: #fdf0f0; }
     tr.out td { color: #bbb; }
-    tr.hol { background: #fffbe6; }
     tr.sep td { background: #e8edf3; font-size: 0.73rem; font-weight: 700; color: #556; letter-spacing: .4px; padding: 5px 14px; }
     .price { font-weight: 700; direction: ltr; }
     .price.green { color: #27ae60; }
@@ -39,14 +38,9 @@
     .eve { font-size: 0.78rem; color: #003f88; font-weight: 600; display: block; margin-top: 4px; }
     .note { font-size: 0.7rem; color: #888; font-style: italic; }
     .tag { display: inline-block; border-radius: 8px; padding: 2px 7px; font-size: 0.72rem; font-weight: 600; }
-    .tag.red  { background: #fdd; color: #900; }
-    .tag.gold { background: #ffd966; color: #7a5000; }
-    .tag.ok   { background: #dfd; color: #1a6b1a; }
     .tag.grey { background: #eee; color: #888; }
 
-    /* ── VOTE TABLE ── */
-    #voteTable { min-width: 520px; }
-    #voteTable td { white-space: nowrap; }
+    /* ── LEGEND ── */
     .legend { display: flex; gap: 18px; margin-bottom: 14px; flex-wrap: wrap; }
     .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: #445; }
     .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
@@ -54,10 +48,12 @@
     .dot.ok    { background: #f0a500; }
     .dot.no    { background: #e74c3c; }
 
+    /* ── VOTE TABLE — DESKTOP ── */
+    #voteTable { min-width: 520px; }
+    #voteTable td { white-space: nowrap; }
     th.name-col { text-align: right; padding-right: 14px; min-width: 70px; }
     .date-head .range  { font-weight: 700; display: block; font-size: 0.82rem; }
     .date-head .dprice { color: #ffd966; font-size: 0.7rem; }
-    .date-head .dprice-ils { color: #b8d8ff; font-size: 0.65rem; }
     .date-head .dnote  { color: #aac8ff; font-size: 0.66rem; }
 
     tr.vote-row td { padding: 8px 8px; }
@@ -66,7 +62,7 @@
     td.name { text-align: right; padding-right: 14px; font-weight: 700; font-size: 0.9rem; color: #1a2a3a; }
 
     .opts { display: flex; gap: 3px; justify-content: center; }
-    .opt-btn { border: 1.5px solid #ddd; background: #fff; border-radius: 7px; padding: 4px 8px; font-size: 0.69rem; cursor: pointer; color: #999; transition: all .12s; font-family: inherit; white-space: nowrap; }
+    .opt-btn { border: 1.5px solid #ddd; background: #fff; border-radius: 7px; padding: 4px 8px; font-size: 0.69rem; cursor: pointer; color: #999; transition: all .12s; font-family: inherit; white-space: nowrap; touch-action: manipulation; }
     .opt-btn:hover { border-color: #aaa; color: #555; }
     .opt-btn.active-great { background: #e6f9ee; border-color: #27ae60; color: #1a7a40; font-weight: 700; }
     .opt-btn.active-ok    { background: #fff8e1; border-color: #f0a500; color: #9a6700; font-weight: 700; }
@@ -92,6 +88,49 @@
     .winner-cell.best    { color: #27ae60; }
     .winner-cell.blocked { color: #e74c3c; font-size: 0.8rem; }
     .winner-cell.neutral { color: #ccc; }
+
+    /* ── MOBILE CARDS (vote table) ── */
+    @media (max-width: 600px) {
+      body { padding: 16px 10px; }
+      h1 { font-size: 1.05rem; }
+      .sub { font-size: 0.78rem; }
+
+      /* hide desktop vote table, show cards instead */
+      .vote-table-wrap { display: none; }
+
+      .vote-cards { display: flex; flex-direction: column; gap: 14px; }
+
+      .vote-card { background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,.09); overflow: hidden; }
+      .vote-card-name { background: #003f88; color: #fff; font-weight: 700; font-size: 1rem; padding: 10px 16px; }
+      .vote-card-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid #edf0f4; gap: 10px; }
+      .vote-card-row:last-child { border-bottom: none; }
+      .vote-card-label { font-size: 0.82rem; font-weight: 600; color: #334; flex-shrink: 0; }
+      .vote-card-label small { display: block; font-size: 0.7rem; color: #889; font-weight: 400; }
+      .vote-card-btns { display: flex; gap: 6px; }
+      .vote-card-btns .opt-btn { padding: 8px 12px; font-size: 0.78rem; border-radius: 8px; }
+
+      /* mobile summary */
+      .mobile-summary { margin-top: 20px; }
+      .mobile-summary h3 { font-size: 0.85rem; color: #556; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 10px; }
+      .mobile-sum-cards { display: flex; flex-direction: column; gap: 10px; }
+      .mobile-sum-card { background: #fff; border-radius: 10px; padding: 12px 14px; box-shadow: 0 1px 6px rgba(0,0,0,.08); }
+      .mobile-sum-card-date { font-size: 0.85rem; font-weight: 700; color: #003f88; margin-bottom: 8px; }
+      .mobile-sum-lines { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+      .mobile-sum-line { display: flex; align-items: center; gap: 5px; font-size: 0.8rem; }
+      .mobile-sum-bar-wrap { width: 40px; background: #e9ecf0; border-radius: 4px; height: 7px; }
+      .mobile-sum-bar { height: 7px; border-radius: 4px; transition: width .3s; }
+      .mobile-sum-bar.great { background: #27ae60; }
+      .mobile-sum-bar.ok    { background: #f0a500; }
+      .mobile-sum-bar.no    { background: #e74c3c; }
+      .mobile-win { margin-top: 6px; font-size: 0.82rem; font-weight: 700; }
+      .mobile-win.best    { color: #27ae60; }
+      .mobile-win.blocked { color: #e74c3c; }
+    }
+
+    @media (min-width: 601px) {
+      .vote-cards { display: none; }
+      .mobile-summary { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -193,7 +232,8 @@
     <div class="legend-item"><div class="dot no"></div> לא מתאים בכלל</div>
   </div>
 
-  <div class="table-wrap">
+  <!-- Desktop table -->
+  <div class="table-wrap vote-table-wrap">
   <table id="voteTable">
     <thead>
       <tr>
@@ -205,6 +245,15 @@
     </thead>
     <tbody id="voteBody"></tbody>
   </table>
+  </div>
+
+  <!-- Mobile cards -->
+  <div class="vote-cards" id="voteCards"></div>
+
+  <!-- Mobile summary -->
+  <div class="mobile-summary" id="mobileSummary">
+    <h3>סיכום</h3>
+    <div class="mobile-sum-cards" id="mobileSumCards"></div>
   </div>
 
 </div>
@@ -228,9 +277,9 @@
 
   const girls = ['טלי', 'רותם', 'אירה', 'יאנה'];
   const dates = [
-    { id: 'd2', label: '17–20 ספט׳' },
-    { id: 'd3', label: '24–27 ספט׳' },
-    { id: 'd4', label: '1–4 אוק׳' },
+    { id: 'd2', label: '17–20 ספט׳', price: '€257 · ₪917',  note: 'ערב יוה״כ' },
+    { id: 'd3', label: '24–27 ספט׳', price: '€359 · ₪1,282', note: 'סוכות' },
+    { id: 'd4', label: '1–4 אוק׳',   price: '€375 · ₪1,339', note: 'שמח״ת' },
   ];
   const OPTS = [
     { val: 'great', label: '✓ מעולה' },
@@ -238,9 +287,10 @@
     { val: 'no',    label: '✗ לא מתאים' },
   ];
 
-  const body = document.getElementById('voteBody');
+  const body  = document.getElementById('voteBody');
+  const cards = document.getElementById('voteCards');
 
-  // ── BUILD VOTE ROWS ──
+  // ── BUILD DESKTOP TABLE ROWS ──
   girls.forEach(girl => {
     const tr = document.createElement('tr');
     tr.className = 'vote-row';
@@ -261,7 +311,7 @@
   divTr.innerHTML = `<td colspan="4">סיכום</td>`;
   body.appendChild(divTr);
 
-  // ── SUMMARY ROWS ──
+  // ── SUMMARY ROWS (desktop) ──
   OPTS.forEach(o => {
     const tr = document.createElement('tr');
     tr.className = 'sum-row';
@@ -276,7 +326,7 @@
     body.appendChild(tr);
   });
 
-  // ── WINNER ROW ──
+  // ── WINNER ROW (desktop) ──
   const winTr = document.createElement('tr');
   winTr.className = 'winner-row';
   winTr.id = 'winRow';
@@ -286,8 +336,46 @@
   winTr.innerHTML = winHtml;
   body.appendChild(winTr);
 
-  // ── BUTTON CLICK HANDLER ──
-  body.addEventListener('click', e => {
+  // ── BUILD MOBILE CARDS ──
+  girls.forEach(girl => {
+    const card = document.createElement('div');
+    card.className = 'vote-card';
+    let html = `<div class="vote-card-name">${girl}</div>`;
+    dates.forEach(d => {
+      const btns = OPTS.map(o =>
+        `<button class="opt-btn" data-girl="${girl}" data-date="${d.id}" data-val="${o.val}">${o.label}</button>`
+      ).join('');
+      html += `<div class="vote-card-row">
+        <div class="vote-card-label">${d.label}<small>${d.note} · ${d.price}</small></div>
+        <div class="vote-card-btns">${btns}</div>
+      </div>`;
+    });
+    card.innerHTML = html;
+    cards.appendChild(card);
+  });
+
+  // ── BUILD MOBILE SUMMARY ──
+  const mobileSumCards = document.getElementById('mobileSumCards');
+  dates.forEach(d => {
+    const card = document.createElement('div');
+    card.className = 'mobile-sum-card';
+    card.id = `msc-${d.id}`;
+    card.innerHTML = `
+      <div class="mobile-sum-card-date">${d.label}</div>
+      <div class="mobile-sum-lines">
+        ${OPTS.map(o => `
+          <div class="mobile-sum-line">
+            <div class="mini-dot ${o.val}"></div>
+            <div class="mobile-sum-bar-wrap"><div class="mobile-sum-bar ${o.val}" id="msb-${o.val}-${d.id}" style="width:0%"></div></div>
+            <span class="sum-num" id="msn-${o.val}-${d.id}">0</span>
+          </div>`).join('')}
+      </div>
+      <div class="mobile-win" id="mwin-${d.id}"></div>`;
+    mobileSumCards.appendChild(card);
+  });
+
+  // ── HANDLE CLICKS (both desktop & mobile buttons) ──
+  document.addEventListener('click', e => {
     const btn = e.target.closest('.opt-btn');
     if (!btn) return;
     const { girl, date, val } = btn.dataset;
@@ -304,7 +392,7 @@
   onValue(ref(db, 'votes'), snapshot => {
     const data = snapshot.val() || {};
 
-    // Update button states
+    // Update all buttons (desktop + mobile)
     girls.forEach(girl => {
       dates.forEach(d => {
         const current = data[girl]?.[d.id] || null;
@@ -315,7 +403,7 @@
       });
     });
 
-    // Update summary + winner
+    // Compute scores
     let bestScore = -1;
     const scores = {};
     dates.forEach(d => {
@@ -327,41 +415,56 @@
         else if (v === 'no') no++;
       });
       const n = girls.length;
+      const score = no > 0 ? -1 : great * 2 + ok;
+      scores[d.id] = { score, no, great, ok };
+      if (score > bestScore) bestScore = score;
+
+      // Desktop summary
       document.getElementById(`sb-great-${d.id}`).style.width = Math.round(great / n * 100) + '%';
       document.getElementById(`sb-ok-${d.id}`).style.width    = Math.round(ok    / n * 100) + '%';
       document.getElementById(`sb-no-${d.id}`).style.width    = Math.round(no    / n * 100) + '%';
       document.getElementById(`sn-great-${d.id}`).textContent = great;
       document.getElementById(`sn-ok-${d.id}`).textContent    = ok;
       document.getElementById(`sn-no-${d.id}`).textContent    = no;
-      const score = no > 0 ? -1 : great * 2 + ok;
-      scores[d.id] = { score, no };
-      if (score > bestScore) bestScore = score;
+
+      // Mobile summary
+      document.getElementById(`msb-great-${d.id}`).style.width = Math.round(great / n * 100) + '%';
+      document.getElementById(`msb-ok-${d.id}`).style.width    = Math.round(ok    / n * 100) + '%';
+      document.getElementById(`msb-no-${d.id}`).style.width    = Math.round(no    / n * 100) + '%';
+      document.getElementById(`msn-great-${d.id}`).textContent = great;
+      document.getElementById(`msn-ok-${d.id}`).textContent    = ok;
+      document.getElementById(`msn-no-${d.id}`).textContent    = no;
     });
 
     const anyVote = girls.some(g => dates.some(d => data[g]?.[d.id]));
-    const winRow  = document.getElementById('winRow');
 
+    // Desktop winner row
+    const winRow = document.getElementById('winRow');
     if (anyVote && bestScore >= 0) {
       winRow.style.display = '';
       dates.forEach(d => {
         const cell = document.getElementById(`win-${d.id}`);
         const { score, no } = scores[d.id];
-        if (no > 0) {
-          cell.innerHTML = `<span class="winner-cell blocked">✗ חסום</span>`;
-        } else if (score === bestScore) {
-          cell.innerHTML = `<span class="winner-cell best">★ הכי מתאים</span>`;
-        } else {
-          cell.innerHTML = `<span class="winner-cell neutral">—</span>`;
-        }
+        if (no > 0)              cell.innerHTML = `<span class="winner-cell blocked">✗ חסום</span>`;
+        else if (score===bestScore) cell.innerHTML = `<span class="winner-cell best">★ הכי מתאים</span>`;
+        else                     cell.innerHTML = `<span class="winner-cell neutral">—</span>`;
       });
     } else if (anyVote) {
       winRow.style.display = '';
-      dates.forEach(d => {
-        document.getElementById(`win-${d.id}`).innerHTML = `<span class="winner-cell blocked">✗ חסום</span>`;
-      });
+      dates.forEach(d => { document.getElementById(`win-${d.id}`).innerHTML = `<span class="winner-cell blocked">✗ חסום</span>`; });
     } else {
       winRow.style.display = 'none';
     }
+
+    // Mobile winner
+    dates.forEach(d => {
+      const el = document.getElementById(`mwin-${d.id}`);
+      if (!anyVote) { el.textContent = ''; return; }
+      const { score, no } = scores[d.id];
+      if (no > 0)               { el.textContent = '✗ חסום'; el.className = 'mobile-win blocked'; }
+      else if (score===bestScore && bestScore>=0) { el.textContent = '★ הכי מתאים'; el.className = 'mobile-win best'; }
+      else                      { el.textContent = ''; el.className = 'mobile-win'; }
+    });
   });
 </script>
 </body>
