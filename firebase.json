@@ -1,0 +1,9 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": ["firebase.json", "render.yaml", ".git", ".gitignore"],
+    "rewrites": [
+      { "source": "/", "destination": "/vote.html" }
+    ]
+  }
+}
