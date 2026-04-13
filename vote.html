@@ -213,7 +213,23 @@
 
 </div>
 
-<script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+  import { getDatabase, ref, set, remove, onValue } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyASs_Ymg8WTRW1cjFdeiJ3jb9mKkliQXGY",
+    authDomain: "crete-vote-2026.firebaseapp.com",
+    databaseURL: "https://crete-vote-2026-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "crete-vote-2026",
+    storageBucket: "crete-vote-2026.firebasestorage.app",
+    messagingSenderId: "442972173823",
+    appId: "1:442972173823:web:5e367d7e13bc864b20a3ca"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getDatabase(app);
+
   const girls = ['טלי', 'רותם', 'אירה', 'יאנה'];
   const dates = [
     { id: 'd2', label: '17–20 ספט׳' },
@@ -226,21 +242,17 @@
     { val: 'no',    label: '✗ לא מתאים' },
   ];
 
-  const saved = JSON.parse(localStorage.getItem('creteVote5') || '{}');
-  const body  = document.getElementById('voteBody');
+  const body = document.getElementById('voteBody');
 
-  // ── VOTE ROWS ──
+  // ── BUILD VOTE ROWS ──
   girls.forEach(girl => {
     const tr = document.createElement('tr');
     tr.className = 'vote-row';
     let html = `<td class="name">${girl}</td>`;
     dates.forEach(d => {
-      const key = `${girl}__${d.id}`;
-      const cur = saved[key] || null;
-      const btns = OPTS.map(o => {
-        const active = cur === o.val ? `active-${o.val}` : '';
-        return `<button class="opt-btn ${active}" data-girl="${girl}" data-date="${d.id}" data-val="${o.val}" onclick="choose(this)">${o.label}</button>`;
-      }).join('');
+      const btns = OPTS.map(o =>
+        `<button class="opt-btn" data-girl="${girl}" data-date="${d.id}" data-val="${o.val}">${o.label}</button>`
+      ).join('');
       html += `<td><div class="opts">${btns}</div></td>`;
     });
     tr.innerHTML = html;
@@ -278,35 +290,42 @@
   winTr.innerHTML = winHtml;
   body.appendChild(winTr);
 
-  // ── CHOOSE (click active button again to unmark) ──
-  function choose(btn) {
+  // ── BUTTON CLICK HANDLER ──
+  body.addEventListener('click', e => {
+    const btn = e.target.closest('.opt-btn');
+    if (!btn) return;
     const { girl, date, val } = btn.dataset;
-    const key = `${girl}__${date}`;
     const wasActive = btn.classList.contains(`active-${val}`);
-
-    btn.closest('.opts').querySelectorAll('.opt-btn').forEach(b =>
-      b.classList.remove('active-great', 'active-ok', 'active-no'));
-
+    const voteRef = ref(db, `votes/${girl}/${date}`);
     if (wasActive) {
-      delete saved[key];
+      remove(voteRef);
     } else {
-      btn.classList.add(`active-${val}`);
-      saved[key] = val;
+      set(voteRef, val);
     }
+  });
 
-    localStorage.setItem('creteVote5', JSON.stringify(saved));
-    update();
-  }
+  // ── LIVE SYNC FROM FIREBASE ──
+  onValue(ref(db, 'votes'), snapshot => {
+    const data = snapshot.val() || {};
 
-  // ── UPDATE ──
-  function update() {
+    // Update button states
+    girls.forEach(girl => {
+      dates.forEach(d => {
+        const current = data[girl]?.[d.id] || null;
+        document.querySelectorAll(`.opt-btn[data-girl="${girl}"][data-date="${d.id}"]`).forEach(btn => {
+          btn.classList.remove('active-great', 'active-ok', 'active-no');
+          if (current === btn.dataset.val) btn.classList.add(`active-${current}`);
+        });
+      });
+    });
+
+    // Update summary + winner
     let bestScore = -1;
     const scores = {};
-
     dates.forEach(d => {
       let great = 0, ok = 0, no = 0;
       girls.forEach(g => {
-        const v = saved[`${g}__${d.id}`];
+        const v = data[g]?.[d.id];
         if (v === 'great') great++;
         else if (v === 'ok') ok++;
         else if (v === 'no') no++;
@@ -318,13 +337,12 @@
       document.getElementById(`sn-great-${d.id}`).textContent = great;
       document.getElementById(`sn-ok-${d.id}`).textContent    = ok;
       document.getElementById(`sn-no-${d.id}`).textContent    = no;
-
       const score = no > 0 ? -1 : great * 2 + ok;
-      scores[d.id] = { score, great, ok, no };
+      scores[d.id] = { score, no };
       if (score > bestScore) bestScore = score;
     });
 
-    const anyVote = dates.some(d => girls.some(g => saved[`${g}__${d.id}`]));
+    const anyVote = girls.some(g => dates.some(d => data[g]?.[d.id]));
     const winRow  = document.getElementById('winRow');
 
     if (anyVote && bestScore >= 0) {
@@ -348,9 +366,7 @@
     } else {
       winRow.style.display = 'none';
     }
-  }
-
-  update();
+  });
 </script>
 </body>
 </html>
