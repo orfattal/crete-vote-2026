@@ -26,6 +26,7 @@
     #flightsTable td { white-space: nowrap; }
     #flightsTable td.hol-col { white-space: normal; }
     .t { font-size: 0.75rem; color: #778; direction: ltr; display: inline-block; }
+    .mob-return { display: none; }
     tr.out { background: #fdf0f0; }
     tr.out td { color: #bbb; }
     tr.sep td { background: #e8edf3; font-size: 0.73rem; font-weight: 700; color: #556; letter-spacing: .4px; padding: 5px 14px; }
@@ -100,7 +101,8 @@
       #flightsTable th:nth-child(1),
       #flightsTable td:nth-child(1) { display: none; } /* # */
       #flightsTable th:nth-child(3),
-      #flightsTable td:nth-child(3) { display: none; } /* חזרה */
+      #flightsTable td:nth-child(3) { display: none; } /* hide return col */
+      .mob-return { display: block; font-size: 0.75rem; color: #778; margin-top: 2px; }
       #flightsTable .t { display: none; }              /* flight times */
 
       /* hide desktop vote table, show cards instead */
@@ -168,7 +170,7 @@
 
       <tr class="out">
         <td>1</td>
-        <td><s>חמישי, 3 ספט׳</s> <span class="t">08:15→10:10</span></td>
+        <td><s>חמישי, 3 ספט׳</s> <span class="t">08:15→10:10</span><span class="mob-return"><s>ראשון, 6 ספט׳</s></span></td>
         <td><s>ראשון, 6 ספט׳</s> <span class="t">11:10→12:55</span></td>
         <td class="price grey"><s>€239</s> <span class="price-ils"><s>₪853</s></span></td>
         <td class="hol-col"><span class="tag grey">🏠 הווילה תפוסה</span></td>
@@ -176,7 +178,7 @@
 
       <tr class="out">
         <td>2</td>
-        <td><s>חמישי, 10 ספט׳</s> <span class="t">08:15→10:10</span></td>
+        <td><s>חמישי, 10 ספט׳</s> <span class="t">08:15→10:10</span><span class="mob-return"><s>ראשון, 13 ספט׳</s></span></td>
         <td><s>ראשון, 13 ספט׳</s> <span class="t">11:10→12:55</span></td>
         <td class="price grey"><s>€427</s> <span class="price-ils"><s>₪1,524</s></span></td>
         <td class="hol-col">
@@ -186,7 +188,7 @@
 
       <tr>
         <td>3</td>
-        <td>חמישי, 17 ספט׳ <span class="t">08:15→10:10</span></td>
+        <td>חמישי, 17 ספט׳ <span class="t">08:15→10:10</span><span class="mob-return">ראשון, 20 ספט׳</span></td>
         <td>ראשון, 20 ספט׳ <span class="t">11:10→12:55</span></td>
         <td class="price green">€257 <span class="price-ils">₪917</span></td>
         <td class="hol-col">
@@ -196,7 +198,7 @@
 
       <tr>
         <td>4</td>
-        <td>חמישי, 24 ספט׳ <span class="t">08:15→10:10</span></td>
+        <td>חמישי, 24 ספט׳ <span class="t">08:15→10:10</span><span class="mob-return">ראשון, 27 ספט׳</span></td>
         <td>ראשון, 27 ספט׳ <span class="t">11:10→12:55</span></td>
         <td class="price amber">€359 <span class="price-ils">₪1,282</span></td>
         <td class="hol-col">
@@ -208,7 +210,7 @@
 
       <tr>
         <td>5</td>
-        <td>חמישי, 1 אוק׳ <span class="t">08:15→10:10</span></td>
+        <td>חמישי, 1 אוק׳ <span class="t">08:15→10:10</span><span class="mob-return">ראשון, 4 אוק׳</span></td>
         <td>ראשון, 4 אוק׳ <span class="t">11:10→12:55</span></td>
         <td class="price green">€375 <span class="price-ils">₪1,339</span></td>
         <td class="hol-col">
@@ -218,7 +220,7 @@
 
       <tr class="out">
         <td>6</td>
-        <td><s>חמישי, 8 אוק׳ – 29 אוק׳</s></td>
+        <td><s>חמישי, 8 אוק׳ – 29 אוק׳</s><span class="mob-return"><s>ראשון, 11 אוק׳ – 1 נוב׳</s></span></td>
         <td><s>ראשון, 11 אוק׳ – 1 נוב׳</s></td>
         <td class="price grey">—</td>
         <td class="hol-col"><span class="tag grey">🏁 אין טיסות — העונה מסתיימת אחרי 4 אוק׳</span></td>
