@@ -1,7 +1,6 @@
 services:
   - type: web
     name: crete-vote-2026
-    runtime: docker
-    plan: free
+    runtime: static
     branch: main
-    dockerfilePath: ./Dockerfile
+    staticPublishPath: .
